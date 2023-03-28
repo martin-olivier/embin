@@ -6,11 +6,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
         false => params.name.to_uppercase(),
     };
 
-    writeln!(
-        params.output,
-        "{} = bytes([",
-        name
-    )?;
+    writeln!(params.output, "{} = bytes([", name)?;
 
     write_data(&mut params)?;
 

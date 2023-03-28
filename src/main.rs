@@ -2,8 +2,8 @@ mod args;
 mod lang;
 
 use std::io::{BufReader, Write};
-use std::{fs::File, io::BufWriter};
 use std::path::Path;
+use std::{fs::File, io::BufWriter};
 
 use args::{Args, Language};
 use clap::Parser;
@@ -62,5 +62,6 @@ fn main() {
         Language::C => lang::c::parse(params),
         Language::Cpp => lang::cpp::parse(params),
         Language::Python => lang::python::parse(params),
-    }.unwrap();
+    }
+    .unwrap();
 }
