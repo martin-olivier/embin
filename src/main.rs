@@ -1,9 +1,9 @@
 mod args;
 mod lang;
 
-use std::io::{BufReader, Write};
+use std::fs::File;
+use std::io::{BufReader, BufWriter, Write};
 use std::path::Path;
-use std::{fs::File, io::BufWriter};
 
 use args::{Args, Language};
 use clap::Parser;
