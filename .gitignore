@@ -1,0 +1,11 @@
+# Editor Files and Folders
+
+.idea/
+.vscode/
+.DS_Store
+*~
+\#*#
+
+# Build Folder
+
+/target
