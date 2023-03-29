@@ -14,15 +14,36 @@ you can install `embin` using [cargo](https://www.rust-lang.org/tools/install), 
 cargo install embin
 ```
 
+## Usage
+
+```
+embin [OPTIONS] <INPUT>
+
+Arguments:
+  <INPUT>  Input file, which can be a binary file or a text file
+
+Options:
+  -o, --output <OUTPUT>      Output file, if not specified, the output will be printed to stdout
+  -n, --name <NAME>          Name of the variable
+      --lang <LANG>          Language of the generated source code [default: c]
+      --format <FORMAT>      Format of the generated source code [default: hexa]
+      --indent <INDENT>      Indentation type of the generated source code [default: space]
+      --padding <PADDING>    Set the padding of the generated source code [default: 4]
+      --quantity <QUANTITY>  Set the number of elements per line [default: 16]
+      --mutable              Make generated variables mutable
+  -h, --help                 Print help
+  -V, --version              Print version
+```
+
 ## Examples
 
 ### Embedding a file into C
 
 ```sh
-embin --lang=c -i data.png > output.h
+embin --lang=c data.png > output.h
 ```
 
-Output:
+Result:
 
 ```c
 const unsigned char data_png[] = {
@@ -38,10 +59,10 @@ const int data_png_len = 42;
 ### Embedding a file into C++
 
 ```sh
-embin --lang=cpp -i data.png > output.hpp
+embin --lang=cpp data.png > output.hpp
 ```
 
-Output:
+Result:
 
 ```cpp
 #include <array>
@@ -57,10 +78,10 @@ constexpr std::array<unsigned char, 42> data_png = {
 ### Embedding a file into Python
 
 ```sh
-embin --lang=python -i data.png > output.py
+embin --lang=python data.png > output.py
 ```
 
-Output:
+Result:
 
 ```python
 DATA_PNG = bytes([
@@ -69,6 +90,71 @@ DATA_PNG = bytes([
     0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20,
     0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a
 ])
+```
+
+## Options
+
+### `--name` Set the name of the generated variable
+
+```sh
+embin --name my_embed_image data.png
+```
+
+```c
+const unsigned char my_embed_image[] = {
+    0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65,
+    0x73, 0x74, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x2e, 0x0a, 0x0a, 0x54, 0x68,
+    0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20,
+    0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a
+};
+
+const int my_embed_image_len = 42;
+```
+
+### `--format` Set the format of the generated source code
+
+`Char` format:
+
+```sh
+embin --format=char data.txt
+```
+
+```c
+const unsigned char data_txt[] =
+    "This is a test file.\n\n"
+    "This is a new line.\n";
+const unsigned int data_txt_len = 42;
+```
+
+`Octal` format:
+
+```sh
+embin --format=octal data.txt
+```
+
+```c
+const unsigned char data_txt[] =
+    "\124\150\151\163\040\151\163\040\141\040\164\145\163\164\040\146"
+    "\151\154\145\056\012\012\124\150\151\163\040\151\163\040\141\040"
+    "\156\145\167\040\154\151\156\145\056\012";
+const unsigned int data_txt_len = 42;
+```
+
+### `--mutable` Make generated variables mutable
+
+```sh
+embin --mutable data.png
+```
+
+```c
+unsigned char data_png[] = {
+    0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65,
+    0x73, 0x74, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x2e, 0x0a, 0x0a, 0x54, 0x68,
+    0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20,
+    0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a
+};
+
+unsigned int data_png_len = 42;
 ```
 
 ## License

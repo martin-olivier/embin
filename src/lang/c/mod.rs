@@ -6,15 +6,23 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
         false => "const ",
     };
 
+    let brackets = match params.format {
+        Format::Hexa => " {",
+        _ => "",
+    };
+
     writeln!(
         params.output,
-        "{}unsigned char {}[] = {{",
-        accessibility, params.name
+        "{}unsigned char {}[] ={}",
+        accessibility, params.name, brackets,
     )?;
 
     write_data(&mut params)?;
 
-    writeln!(params.output, "}};")?;
+    match params.format {
+        Format::Hexa => writeln!(params.output, "\n}};")?,
+        _ => writeln!(params.output, "\";")?,
+    }
 
     writeln!(
         params.output,
