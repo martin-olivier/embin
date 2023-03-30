@@ -38,9 +38,10 @@ jobs:
         run: cargo fmt --all -- --check
 
   build:
-    needs: linter
     name: ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
+    needs: linter
+    permissions: write-all
     strategy:
       fail-fast: false
       matrix:
@@ -70,14 +71,16 @@ jobs:
         with:
           name: embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
           path: target/release/embin${{ matrix.suffix }}
+          if-no-files-found: error
+
+      - name: Set binary name
+        if: github.event_name == 'release'
+        run: cp target/release/embin${{ matrix.suffix }} embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
 
       - name: Upload binary
         if: github.event_name == 'release'
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v1
+        with:
+          files: embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          asset_name: embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
-          asset_path: target/release/embin${{ matrix.suffix }}
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_content_type: application/octet-stream
