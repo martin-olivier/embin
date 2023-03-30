@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{BufReader, BufWriter, Write};
 use std::path::Path;
 
-use crate::args::Args;
+use crate::args::{Args, Indent};
 use crate::lang::Params;
 use colored::Colorize;
 
@@ -48,6 +48,10 @@ pub fn parse(args: &Args) -> Params {
 
     if args.quantity == 0 {
         panic!("Quantity parameter must be greater than 0");
+    }
+
+    if args.indent == Indent::Tab && args.padding % 4 != 0 {
+        panic!("Padding must be a multiple of 4 when using tabs as indentation type");
     }
 
     Params {

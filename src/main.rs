@@ -1,13 +1,13 @@
 mod args;
 mod lang;
-mod parsing;
+mod parser;
 
 use args::{Args, Language};
 use clap::Parser;
 
 fn main() {
     let args = Args::parse();
-    let params = parsing::parse(&args);
+    let params = parser::parse(&args);
 
     match args.lang {
         Language::C => lang::c::parse(params),

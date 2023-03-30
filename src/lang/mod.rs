@@ -21,7 +21,7 @@ pub struct Params {
 fn write_data(params: &mut Params) -> Result<(), Error> {
     let padding = match params.indent {
         Indent::Space => " ".repeat(params.padding),
-        Indent::Tab => "\t".repeat(params.padding),
+        Indent::Tab => "\t".repeat(params.padding / 4),
     };
 
     for (it, byte) in params.input.by_ref().bytes().enumerate() {
