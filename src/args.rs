@@ -31,7 +31,7 @@ pub struct Args {
     #[clap(short, long, value_parser)]
     pub output: Option<String>,
 
-    /// Use a specific variable name for the generated content, instead of the input file name
+    /// Use a specific variable name for the generated content instead of input file name
     #[clap(short, long, value_parser)]
     pub name: Option<String>,
 

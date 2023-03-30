@@ -42,6 +42,7 @@ jobs:
     name: ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
+      fail-fast: false
       matrix:
         runs-on: [ubuntu-latest, macos-latest, windows-latest]
         include:
@@ -62,7 +63,7 @@ jobs:
       - name: Run tests
         if: matrix.os != 'windows-latest'
         working-directory: tests
-        run: python3 run_tests.py
+        run: ./run_tests.sh
 
       - name: Save artifact
         uses: actions/upload-artifact@v3

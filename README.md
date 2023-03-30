@@ -24,7 +24,7 @@ Arguments:
 
 Options:
   -o, --output <OUTPUT>      Write generated source code in the specified output file instead of stdout
-  -n, --name <NAME>          Use a specific variable name for the generated content, instead of the input file name
+  -n, --name <NAME>          Use a specific variable name for the generated content instead of input file name
       --lang <LANG>          Language of the generated source code [default: c]
       --format <FORMAT>      Format of the generated source code [default: hexa]
       --indent <INDENT>      Indentation type of the generated source code [default: space]
@@ -153,13 +153,13 @@ embin --padding 0 data.png
 ```
 
 ```c
-unsigned char data_png[] = {
+const unsigned char data_png[] = {
 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65,
 0x73, 0x74, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x2e, 0x0a, 0x0a, 0x54, 0x68,
 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20,
 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a
 };
-unsigned int data_png_len = 42;
+const unsigned int data_png_len = 42;
 ```
 
 ### `--quantity` Set number of byte elements per line
@@ -169,7 +169,7 @@ embin --quantity 8 data.png
 ```
 
 ```c
-unsigned char data_png[] = {
+const unsigned char data_png[] = {
     0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20,
     0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0x20, 0x66,
     0x69, 0x6c, 0x65, 0x2e, 0x0a, 0x0a, 0x54, 0x68,
@@ -177,7 +177,7 @@ unsigned char data_png[] = {
     0x6e, 0x65, 0x77, 0x20, 0x6c, 0x69, 0x6e, 0x65,
     0x2e, 0x0a
 };
-unsigned int data_png_len = 42;
+const unsigned int data_png_len = 42;
 ```
 
 ### `--mutable` Make generated variables mutable
