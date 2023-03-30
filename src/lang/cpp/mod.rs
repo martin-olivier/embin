@@ -18,14 +18,14 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
 
     let brackets = match params.format {
         Format::Hex => " {",
-        _ => "",
+        _ => "(",
     };
 
     writeln!(params.output, "#include <{}>\n", storage)?;
 
     writeln!(
         params.output,
-        "{}std::{}{} {} ={}",
+        "{}std::{}{} {}{}",
         accessibility, storage, template, params.name, brackets
     )?;
 
@@ -33,7 +33,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
 
     match params.format {
         Format::Hex => writeln!(params.output, "\n}};")?,
-        _ => writeln!(params.output, "\";")?,
+        _ => writeln!(params.output, "\", {}\n);", params.len)?,
     }
 
     Ok(())
