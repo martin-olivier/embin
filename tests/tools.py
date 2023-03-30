@@ -1,8 +1,8 @@
 import os
 import subprocess
 
-binary = "/Windows/System32/cmd.exe" if os.name == 'nt' else "/bin/bash"
 os_extension = ".exe" if os.name == 'nt' else ""
+binary = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../target/release/embin" + os_extension)
 
 RED = "\033[1;31m"
 GREEN = "\033[1;32m"

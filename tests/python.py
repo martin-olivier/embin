@@ -26,8 +26,8 @@ dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "python")
 def run_tests():
     os.chdir(dir_path)
 
-    test("embin " + binary + " --lang=python --name=asset --format=hex -o asset.py")
-    test("embin " + binary + " --lang=python --name=asset --format=octal -o asset.py")
-    test("embin " + binary + " --lang=python --name=asset --format=char -o asset.py")
+    test("embin " + os.path.relpath(binary) + " --lang=python --name=asset --format=hex -o asset.py")
+    test("embin " + os.path.relpath(binary) + " --lang=python --name=asset --format=octal -o asset.py")
+    test("embin " + os.path.relpath(binary) + " --lang=python --name=asset --format=char -o asset.py")
 
     os.chdir(old_path)

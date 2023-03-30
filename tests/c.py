@@ -30,8 +30,8 @@ dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "c")
 def run_tests():
     os.chdir(dir_path)
 
-    test("embin " + binary + " --lang=c --name=asset --format=hex -o asset.h")
-    test("embin " + binary + " --lang=c --name=asset --format=octal -o asset.h")
-    test("embin " + binary + " --lang=c --name=asset --format=char -o asset.h")
+    test("embin " + os.path.relpath(binary) + " --lang=c --name=asset --format=hex -o asset.h")
+    test("embin " + os.path.relpath(binary) + " --lang=c --name=asset --format=octal -o asset.h")
+    test("embin " + os.path.relpath(binary) + " --lang=c --name=asset --format=char -o asset.h")
 
     os.chdir(old_path)
