@@ -2,17 +2,17 @@
 
 `embin` is a simple program that can embed binary or text files into source code of a specific language.
 
-`⭐ Don't forget to put a star if you like the project!`
-
 ## Installation
 
-You can find pre-built releases for `linux`, `macOS` and `Windows` [here](https://github.com/martin-olivier/embin/releases/latest)
+You can find pre-built [releases](https://github.com/martin-olivier/embin/releases/latest) for `linux`, `macOS` and `Windows`
 
 Otherwise, you can install `embin` from source using [cargo](https://www.rust-lang.org/tools/install), with the following command:
 
 ```sh
 cargo install embin
 ```
+
+`⭐ Don't forget to put a star if you like the project!`
 
 ## Usage
 

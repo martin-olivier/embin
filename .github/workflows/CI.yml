@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: webiny/action-conventional-commits@v1.0.5
+      - uses: webiny/action-conventional-commits@v1.1.0
 
   linter:
     name: linter
@@ -37,52 +37,39 @@ jobs:
 
   build:
     needs: linter
+    name: ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        os: [x86_64-unknown-linux-musl, arm-unknown-linux-musleabihf]
-        runs-on: [ubuntu-latest]
-        cross: [true]
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
         include:
-          - os: x86_64-apple-darwin
-            runs-on: macos-latest
-            cross: false
-          - os: x86_64-pc-windows-gnu
-            runs-on: windows-latest
+          - runs-on: ubuntu-latest
+            os: linux
+          - runs-on: macos-latest
+            os: macos
+          - runs-on: windows-latest
+            os: win
             suffix: .exe
-            cross: false
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          profile: minimal
-          target: ${{ matrix.os }}
+      - name: Build binary
+        run: cargo build --release
 
-      - name: Build Binary
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: ${{ matrix.cross }}
-          command: build
-          args: --target ${{ matrix.os }} --release
-
-      - name: Save Artifact
+      - name: Save artifact
         uses: actions/upload-artifact@v3
         with:
           name: embin-${{ matrix.os }}${{ matrix.suffix }}
-          path: target/${{ matrix.os }}/release/embin${{ matrix.suffix }}
+          path: target/release/embin${{ matrix.suffix }}
 
-      - name: Upload Binary
+      - name: Upload binary
         if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           asset_name: embin-${{ matrix.os }}${{ matrix.suffix }}
-          asset_path: target/${{ matrix.os }}/release/embin${{ matrix.suffix }}
+          asset_path: target/release/embin${{ matrix.suffix }}
           upload_url: ${{ github.event.release.upload_url }}
           asset_content_type: application/octet-stream
