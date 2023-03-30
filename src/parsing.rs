@@ -26,10 +26,6 @@ pub fn parse(args: &Args) -> Params {
         },
     };
 
-    if name.is_empty() {
-        panic!("File name cannot be empty");
-    }
-
     let (len, input) = match File::open(&args.input) {
         Ok(file) => (file.metadata().unwrap().len(), BufReader::new(file)),
         Err(e) => panic!("Could not open input file: {}", e),
@@ -45,6 +41,14 @@ pub fn parse(args: &Args) -> Params {
         }
         None => BufWriter::new(Box::new(std::io::stdout())),
     };
+
+    if name.is_empty() {
+        panic!("File name cannot be empty");
+    }
+
+    if args.quantity == 0 {
+        panic!("Quantity parameter must be greater than 0");
+    }
 
     Params {
         input,

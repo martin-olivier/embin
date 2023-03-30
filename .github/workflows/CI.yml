@@ -48,14 +48,18 @@ jobs:
           - runs-on: macos-latest
             os: macos
           - runs-on: windows-latest
-            os: win
+            os: windows
             suffix: .exe
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build binary
-        run: cargo build --release
+      - name: Build and install binary
+        run: cargo install --path .
+
+      - name: Run tests
+        working-directory: tests
+        run: python3 run_tests.py
 
       - name: Save artifact
         uses: actions/upload-artifact@v3
