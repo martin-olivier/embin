@@ -1,7 +1,7 @@
-import c.tests
-import cpp.tests
-import python.tests
+import c
+import cpp
+import python
 
-c.tests.run()
-cpp.tests.run()
-python.tests.run()
+c.run_tests()
+cpp.run_tests()
+python.run_tests()
