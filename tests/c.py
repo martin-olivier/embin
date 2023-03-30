@@ -5,6 +5,11 @@ from tools import GREEN, RED, END
 
 bin_path = "build/Debug/" if os.name == 'nt' else "build/"
 
+def cleanup():
+    cmd("rm -r build")
+    cmd("rm asset.h")
+    cmd("rm result")
+
 def test(command: str):
     try:
         cmd(command)
@@ -13,15 +18,11 @@ def test(command: str):
         cmd(bin_path + "writer" + os_extension)
         cmd("diff " + binary + " ./result")
         print(GREEN + "[OK] " + END + command)
+        cleanup()
     except Exception as e:
         print(RED + "[KO] " + END + command)
+        cleanup()
         raise Exception(e)
-
-def cleanup():
-    cmd("rm -r build")
-    cmd("rm asset.h")
-    cmd("rm result")
-
 
 old_path = os.getcwd()
 dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "c")
@@ -32,7 +33,5 @@ def run_tests():
     test("embin " + binary + " --lang=c --name=asset --format=hex -o asset.h")
     test("embin " + binary + " --lang=c --name=asset --format=octal -o asset.h")
     test("embin " + binary + " --lang=c --name=asset --format=char -o asset.h")
-
-    cleanup()
 
     os.chdir(old_path)
