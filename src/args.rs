@@ -15,7 +15,7 @@ pub enum Indent {
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
 pub enum Format {
-    Hexa,
+    Hex,
     Octal,
     Char,
 }
@@ -42,7 +42,7 @@ pub struct Args {
 
     /// Format of the generated source code
     #[arg(value_enum)]
-    #[clap(long, value_parser, default_value_t = Format::Hexa)]
+    #[clap(long, value_parser, default_value_t = Format::Hex)]
     pub format: Format,
 
     /// Indentation type of the generated source code

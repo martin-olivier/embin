@@ -33,7 +33,7 @@ fn write_data(params: &mut Params) -> Result<(), Error> {
 
         if line_begin {
             match params.format {
-                Format::Hexa => write!(params.output, "{}", padding)?,
+                Format::Hex => write!(params.output, "{}", padding)?,
                 _ => write!(params.output, "{}\"", padding)?,
             }
         }
@@ -49,7 +49,7 @@ fn write_data(params: &mut Params) -> Result<(), Error> {
         };
 
         match params.format {
-            Format::Hexa => write!(params.output, "0x{:02x}{}{}", byte, separator, space)?,
+            Format::Hex => write!(params.output, "0x{:02x}{}{}", byte, separator, space)?,
             Format::Octal => write!(params.output, "\\{:03o}", byte as u32)?,
             Format::Char => {
                 if (32..=126).contains(&byte) && ![b'"', b'\\', b'?', b':', b'%'].contains(&(byte))
@@ -73,7 +73,7 @@ fn write_data(params: &mut Params) -> Result<(), Error> {
 
         if line_end && !last {
             match params.format {
-                Format::Hexa => writeln!(params.output)?,
+                Format::Hex => writeln!(params.output)?,
                 _ => writeln!(params.output, "\"")?,
             }
         }

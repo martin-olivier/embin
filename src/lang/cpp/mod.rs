@@ -7,17 +7,17 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
     };
 
     let storage = match params.format {
-        Format::Hexa => "array",
+        Format::Hex => "array",
         _ => "string_view",
     };
 
     let template = match params.format {
-        Format::Hexa => format!("<unsigned char, {}>", params.len),
+        Format::Hex => format!("<unsigned char, {}>", params.len),
         _ => "".to_string(),
     };
 
     let brackets = match params.format {
-        Format::Hexa => " {",
+        Format::Hex => " {",
         _ => "",
     };
 
@@ -32,7 +32,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
     write_data(&mut params)?;
 
     match params.format {
-        Format::Hexa => writeln!(params.output, "\n}};")?,
+        Format::Hex => writeln!(params.output, "\n}};")?,
         _ => writeln!(params.output, "\";")?,
     }
 

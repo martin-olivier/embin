@@ -7,7 +7,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
     };
 
     let brackets = match params.format {
-        Format::Hexa => "([",
+        Format::Hex => "([",
         _ => "(",
     };
 
@@ -16,8 +16,8 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
     write_data(&mut params)?;
 
     match params.format {
-        Format::Hexa => writeln!(params.output, "\n])")?,
-        _ => writeln!(params.output, "\"\n)")?,
+        Format::Hex => writeln!(params.output, "\n])")?,
+        _ => writeln!(params.output, "\", encoding='raw_unicode_escape'\n)")?,
     }
 
     Ok(())
