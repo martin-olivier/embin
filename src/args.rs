@@ -24,14 +24,14 @@ pub enum Format {
 #[clap(version, about, long_about = None)]
 
 pub struct Args {
-    /// Input file, which can be a binary file or a text file
+    /// Path to the asset to be embed, which can be a binary or a text file
     pub input: String,
 
-    /// Output file, if not specified, the output will be printed to stdout
+    /// Write generated source code in the specified output file instead of stdout
     #[clap(short, long, value_parser)]
     pub output: Option<String>,
 
-    /// Name of the variable, if not specified, the name will be the same as the input file
+    /// Use a specific variable name for the generated content, instead of the input file name
     #[clap(short, long, value_parser)]
     pub name: Option<String>,
 
@@ -50,11 +50,11 @@ pub struct Args {
     #[clap(long, value_parser, default_value_t = Indent::Space)]
     pub indent: Indent,
 
-    /// Set the padding of the generated source code
+    /// Padding value of the generated source code
     #[clap(long, value_parser, default_value_t = 4)]
     pub padding: usize,
 
-    /// Set the number of elements per line
+    /// Number of byte elements per line
     #[clap(long, value_parser, default_value_t = 16)]
     pub quantity: usize,
 

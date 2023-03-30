@@ -2,13 +2,13 @@
 
 `embin` is a simple program that can embed binary or text files into source code of a specific language.
 
-This software works on `Linux`, `MacOS`, and `Windows`
-
 `⭐ Don't forget to put a star if you like the project!`
 
 ## Installation
 
-you can install `embin` using [cargo](https://www.rust-lang.org/tools/install), with the following command:
+You can find pre-built releases for `linux`, `macOS` and `Windows` [here](https://github.com/martin-olivier/embin/releases/latest)
+
+Otherwise, you can install `embin` from source using [cargo](https://www.rust-lang.org/tools/install), with the following command:
 
 ```sh
 cargo install embin
@@ -17,19 +17,19 @@ cargo install embin
 ## Usage
 
 ```
-embin [OPTIONS] <INPUT>
+Usage: embin [OPTIONS] <INPUT>
 
 Arguments:
-  <INPUT>  Input file, which can be a binary file or a text file
+  <INPUT>  Path to the asset to be embed, which can be a binary or a text file
 
 Options:
-  -o, --output <OUTPUT>      Output file, if not specified, the output will be printed to stdout
-  -n, --name <NAME>          Name of the variable
+  -o, --output <OUTPUT>      Write generated source code in the specified output file instead of stdout
+  -n, --name <NAME>          Use a specific variable name for the generated content, instead of the input file name
       --lang <LANG>          Language of the generated source code [default: c]
       --format <FORMAT>      Format of the generated source code [default: hexa]
       --indent <INDENT>      Indentation type of the generated source code [default: space]
-      --padding <PADDING>    Set the padding of the generated source code [default: 4]
-      --quantity <QUANTITY>  Set the number of elements per line [default: 16]
+      --padding <PADDING>    Padding value of the generated source code [default: 4]
+      --quantity <QUANTITY>  Number of byte elements per line [default: 16]
       --mutable              Make generated variables mutable
   -h, --help                 Print help
   -V, --version              Print version
