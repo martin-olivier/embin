@@ -5,20 +5,20 @@ on:
     paths:
       - src/*
       - tests/*
-      - .github/workflows/CI.yml
+      - .github/workflows/*.yml
       - Cargo.toml
   pull_request:
     paths:
       - src/*
       - tests/*
-      - .github/workflows/CI.yml
+      - .github/workflows/*.yml
       - Cargo.toml
   release:
     types: [published]
 
 jobs:
-  conventional_commits:
-    name: conventional commits
+  commits:
+    name: commits
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
