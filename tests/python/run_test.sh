@@ -1,16 +1,16 @@
 set -e
 
-embin /bin/bash --lang=python --name=asset --format=hex -o asset.py
+embin /bin/bash /bin/cat --lang=python --format=hex -o asset.py
 python3 main.py
 diff /bin/bash ./result
 rm -rf __pycache__
 
-embin /bin/bash --lang=python --name=asset --format=octal -o asset.py
+embin /bin/bash /bin/cat --lang=python --format=octal -o asset.py
 python3 main.py
 diff /bin/bash ./result
 rm -rf __pycache__
 
-embin /bin/bash --lang=python --name=asset --format=char -o asset.py
+embin /bin/bash /bin/cat --lang=python --format=char -o asset.py
 python3 main.py
 diff /bin/bash ./result
 rm -rf __pycache__

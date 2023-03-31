@@ -24,16 +24,13 @@ pub enum Format {
 #[clap(version, about, long_about = None)]
 
 pub struct Args {
-    /// Path to the asset to be embed, which can be a binary or a text file
-    pub input: String,
+    /// Input file(s) to embed, which can be binary or text files
+    #[clap(required = true)]
+    pub input: Vec<String>,
 
-    /// Write generated source code in the specified output file instead of stdout
+    /// Write generated source code in output file instead of stdout
     #[clap(short, long, value_parser)]
     pub output: Option<String>,
-
-    /// Use a specific variable name for the generated content instead of input file name
-    #[clap(short, long, value_parser)]
-    pub name: Option<String>,
 
     /// Language of the generated source code
     #[arg(value_enum)]

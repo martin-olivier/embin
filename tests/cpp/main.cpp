@@ -6,7 +6,7 @@ int main()
 {
     std::ofstream out("result");
 
-    out.write(reinterpret_cast<const char *>(asset.data()), asset.size());
+    out.write(reinterpret_cast<const char *>(bash.data()), bash.size());
 
     return 0;
 }

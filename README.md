@@ -1,6 +1,24 @@
-# embin
+<h1 align="center">
+  embin
+  </a>
+</h1>
 
-`embin` is a simple program that can embed binary or text files into source code of a specific language.
+<h4 align="center">A simple program that can embed binary or text files into source code of a specific language</h4>
+
+<p align="center">
+  <a href="https://github.com/martin-olivier/embin/releases/tag/v1.1.0">
+    <img src="https://img.shields.io/badge/Version-1.1.0-blue.svg" alt="version"/>
+  </a>
+  <a href="https://github.com/martin-olivier/embin/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-darkgreen.svg" alt="license"/>
+  </a>
+  <a href="https://www.rust-lang.org/">
+    <img src="https://img.shields.io/badge/Language-Rust-orange.svg" alt="cppversion"/>
+  </a>
+  <a href="https://github.com/martin-olivier/embin/actions/workflows/CI.yml">
+    <img src="https://github.com/martin-olivier/embin/actions/workflows/CI.yml/badge.svg" alt="ci"/>
+  </a>
+</p>
 
 ## Installation
 

@@ -17,7 +17,7 @@ int main() {
     if (fd < 0)
         return 1;
 
-    write(fd, asset, asset_len);
+    write(fd, bash, bash_len);
 
     CLOSE(fd);
     return 0;
