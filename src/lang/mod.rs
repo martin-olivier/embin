@@ -6,11 +6,15 @@ use crate::args::{Format, Indent};
 use std::fs::File;
 use std::io::{BufReader, BufWriter, Error, Read, Write};
 
-pub struct Params {
-    pub input: BufReader<File>,
-    pub output: BufWriter<Box<dyn Write>>,
+pub struct Input {
+    pub file: BufReader<File>,
     pub name: String,
     pub len: usize,
+}
+
+pub struct Params {
+    pub input: Vec<Input>,
+    pub output: BufWriter<Box<dyn Write>>,
     pub mutable: bool,
     pub format: Format,
     pub indent: Indent,
@@ -18,18 +22,20 @@ pub struct Params {
     pub quantity: usize,
 }
 
-fn write_data(params: &mut Params) -> Result<(), Error> {
+fn write_data(params: &mut Params, idx: usize) -> Result<(), Error> {
     let padding = match params.indent {
         Indent::Space => " ".repeat(params.padding),
         Indent::Tab => "\t".repeat(params.padding / 4),
     };
 
-    for (it, byte) in params.input.by_ref().bytes().enumerate() {
+    let len = params.input[idx].len;
+
+    for (it, byte) in params.input[idx].file.by_ref().bytes().enumerate() {
         let byte = byte?;
 
         let line_begin = it % params.quantity == 0;
         let line_end = it % params.quantity == params.quantity - 1;
-        let last = it == params.len - 1;
+        let last = it == len - 1;
 
         if line_begin {
             match params.format {

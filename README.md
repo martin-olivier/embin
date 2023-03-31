@@ -17,16 +17,15 @@ cargo install embin
 ## Usage
 
 ```
-Usage: embin [OPTIONS] <INPUT>
+Usage: embin [OPTIONS] <INPUT>...
 
 Arguments:
-  <INPUT>  Path to the asset to be embed, which can be a binary or a text file
+  <INPUT>...  Input file(s) to embed, which can be binary or text files
 
 Options:
   -o, --output <OUTPUT>      Write generated source code in the specified output file instead of stdout
-  -n, --name <NAME>          Use a specific variable name for the generated content instead of input file name
       --lang <LANG>          Language of the generated source code [default: c]
-      --format <FORMAT>      Format of the generated source code [default: hexa]
+      --format <FORMAT>      Format of the generated source code [default: hex]
       --indent <INDENT>      Indentation type of the generated source code [default: space]
       --padding <PADDING>    Padding value of the generated source code [default: 4]
       --quantity <QUANTITY>  Number of byte elements per line [default: 16]
@@ -91,23 +90,41 @@ DATA_PNG = bytes([
 ])
 ```
 
-## Options
-
-### `--name` Set the name of the generated variable
+### Embedding multiple files
 
 ```sh
-embin --name my_embed_image data.png
+embin --lang=cpp assets/icon.png assets/banner.png > assets.hpp
 ```
 
-```c
-const unsigned char my_embed_image[] = {
+Result:
+
+```c++
+#include <array>
+
+constexpr std::array<unsigned char, 42> icon_png = {
     0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65,
     0x73, 0x74, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x2e, 0x0a, 0x0a, 0x54, 0x68,
     0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20,
     0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a
 };
-const int my_embed_image_len = 42;
+
+constexpr std::array<unsigned char, 86> banner_png = {
+    0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20, 0x6c, 0x69, 0x6e,
+    0x65, 0x2e, 0x0a, 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61,
+    0x20, 0x74, 0x65, 0x73, 0x74, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x2e, 0x0a,
+    0x0a, 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e,
+    0x65, 0x77, 0x20, 0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a, 0x54, 0x68, 0x69,
+    0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0x20,
+    0x66, 0x69, 0x6c, 0x65, 0x2e, 0x0a, 0x0a, 0x54, 0x68, 0x69, 0x73, 0x20,
+    0x73, 0x20
+};
 ```
+
+> ⚠️ On Windows, use `--output` instead of `>` when generating your embedded assets to avoid the following error when running python code:
+>
+> `source code string cannot contain null bytes`
+
+## Options
 
 ### `--format` Set the format of the generated source code
 

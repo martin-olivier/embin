@@ -3,7 +3,7 @@ use std::io::{BufReader, BufWriter, Write};
 use std::path::Path;
 
 use crate::args::{Args, Indent};
-use crate::lang::Params;
+use crate::lang::{Input, Params};
 use colored::Colorize;
 
 pub fn parse(args: &Args) -> Params {
@@ -18,19 +18,6 @@ pub fn parse(args: &Args) -> Params {
         std::process::exit(1);
     }));
 
-    let name = match args.name {
-        Some(ref name) => name.clone(),
-        None => match Path::new(&args.input).file_name() {
-            Some(name) => name.to_str().unwrap_or("").replace('.', "_"),
-            None => panic!("Could not retrieve input file name"),
-        },
-    };
-
-    let (len, input) = match File::open(&args.input) {
-        Ok(file) => (file.metadata().unwrap().len(), BufReader::new(file)),
-        Err(e) => panic!("Could not open input file: {}", e),
-    };
-
     let output: BufWriter<Box<dyn Write>> = match args.output {
         Some(ref path) => {
             let file = match File::create(path) {
@@ -42,10 +29,6 @@ pub fn parse(args: &Args) -> Params {
         None => BufWriter::new(Box::new(std::io::stdout())),
     };
 
-    if name.is_empty() {
-        panic!("File name cannot be empty");
-    }
-
     if args.quantity == 0 {
         panic!("Quantity parameter must be greater than 0");
     }
@@ -54,11 +37,36 @@ pub fn parse(args: &Args) -> Params {
         panic!("Padding must be a multiple of 4 when using tabs as indentation type");
     }
 
+    let mut input_list = vec![];
+
+    for input in args.input.iter() {
+        let (len, file) = match File::open(input) {
+            Ok(file) => (
+                file.metadata().unwrap().len() as usize,
+                BufReader::new(file),
+            ),
+            Err(e) => panic!("Could not open input file: {}", e),
+        };
+
+        let name = match Path::new(&input).file_name() {
+            Some(name) => name.to_str().unwrap_or("").replace('.', "_"),
+            None => panic!("Could not retrieve input file name"),
+        };
+
+        if name.is_empty() {
+            panic!("File name cannot be empty");
+        }
+
+        if input_list.iter().any(|i: &Input| i.name == name) {
+            panic!("Input file names must be unique");
+        }
+
+        input_list.push(Input { file, name, len });
+    }
+
     Params {
-        input,
+        input: input_list,
         output,
-        name,
-        len: len as usize,
         mutable: args.mutable,
         format: args.format,
         indent: args.indent,

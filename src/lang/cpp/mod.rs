@@ -11,11 +11,6 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
         _ => "string_view",
     };
 
-    let template = match params.format {
-        Format::Hex => format!("<unsigned char, {}>", params.len),
-        _ => "".to_string(),
-    };
-
     let brackets = match params.format {
         Format::Hex => " {",
         _ => "(",
@@ -23,17 +18,28 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
 
     writeln!(params.output, "#include <{}>\n", storage)?;
 
-    writeln!(
-        params.output,
-        "{}std::{}{} {}{}",
-        accessibility, storage, template, params.name, brackets
-    )?;
+    for idx in 0..params.input.len() {
+        let template = match params.format {
+            Format::Hex => format!("<unsigned char, {}>", params.input[idx].len),
+            _ => "".to_string(),
+        };
 
-    write_data(&mut params)?;
+        writeln!(
+            params.output,
+            "{}std::{}{} {}{}",
+            accessibility, storage, template, params.input[idx].name, brackets
+        )?;
 
-    match params.format {
-        Format::Hex => writeln!(params.output, "\n}};")?,
-        _ => writeln!(params.output, "\", {}\n);", params.len)?,
+        write_data(&mut params, idx)?;
+
+        match params.format {
+            Format::Hex => writeln!(params.output, "\n}};")?,
+            _ => writeln!(params.output, "\", {}\n);", params.input[idx].len)?,
+        }
+
+        if idx != params.input.len() - 1 {
+            writeln!(params.output)?;
+        }
     }
 
     Ok(())
