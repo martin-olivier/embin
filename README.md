@@ -23,7 +23,7 @@ Arguments:
   <INPUT>...  Input file(s) to embed, which can be binary or text files
 
 Options:
-  -o, --output <OUTPUT>      Write generated source code in the specified output file instead of stdout
+  -o, --output <OUTPUT>      Write generated source code in output file instead of stdout
       --lang <LANG>          Language of the generated source code [default: c]
       --format <FORMAT>      Format of the generated source code [default: hex]
       --indent <INDENT>      Indentation type of the generated source code [default: space]
@@ -90,6 +90,10 @@ DATA_PNG = bytes([
 ])
 ```
 
+> ⚠️ On Windows, use `--output` instead of `>` when generating your embedded assets to avoid the following error when running python code:
+>
+> `source code string cannot contain null bytes`
+
 ### Embedding multiple files
 
 ```sh
@@ -119,10 +123,6 @@ constexpr std::array<unsigned char, 86> banner_png = {
     0x73, 0x20
 };
 ```
-
-> ⚠️ On Windows, use `--output` instead of `>` when generating your embedded assets to avoid the following error when running python code:
->
-> `source code string cannot contain null bytes`
 
 ## Options
 

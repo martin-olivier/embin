@@ -28,7 +28,7 @@ pub struct Args {
     #[clap(required = true)]
     pub input: Vec<String>,
 
-    /// Write generated source code in the specified output file instead of stdout
+    /// Write generated source code in output file instead of stdout
     #[clap(short, long, value_parser)]
     pub output: Option<String>,
 
