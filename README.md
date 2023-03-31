@@ -1,6 +1,6 @@
 # embin
 
-`embin` is a simple program that can embed binary or text files into source code of a specific language.
+A simple program that can embed binary or text files into source code of a specific language.
 
 ## Installation
 
