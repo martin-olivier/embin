@@ -6,8 +6,8 @@
 <h4 align="center">A simple program that can embed binary or text files into source code of a specific language</h4>
 
 <p align="center">
-  <a href="https://github.com/martin-olivier/embin/releases/tag/v1.1.0">
-    <img src="https://img.shields.io/badge/Version-1.1.0-blue.svg" alt="version"/>
+  <a href="https://github.com/martin-olivier/embin/releases/tag/v1.1.1">
+    <img src="https://img.shields.io/badge/Version-1.1.1-blue.svg" alt="version"/>
   </a>
   <a href="https://github.com/martin-olivier/embin/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-darkgreen.svg" alt="license"/>
@@ -69,7 +69,7 @@ const unsigned char data_png[] = {
     0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6e, 0x65, 0x77, 0x20,
     0x6c, 0x69, 0x6e, 0x65, 0x2e, 0x0a
 };
-const int data_png_len = 42;
+const unsigned int data_png_len = 42;
 ```
 
 ### Embedding a file into C++

@@ -4,6 +4,7 @@ use std::path::Path;
 
 use crate::args::{Args, Indent};
 use crate::lang::{Input, Params};
+
 use colored::Colorize;
 
 pub fn parse(args: &Args) -> Params {
@@ -40,22 +41,31 @@ pub fn parse(args: &Args) -> Params {
     let mut input_list = vec![];
 
     for input in args.input.iter() {
+        if Path::new(input).is_dir() {
+            panic!("Could not open input file \"{}\": Is a directory", input);
+        }
+
         let (len, file) = match File::open(input) {
             Ok(file) => (
-                file.metadata().unwrap().len() as usize,
+                match file.metadata() {
+                    Ok(metadata) => metadata.len() as usize,
+                    Err(e) => panic!(
+                        "Could not retrieve input file \"{}\" metadata: {}",
+                        input, e
+                    ),
+                },
                 BufReader::new(file),
             ),
-            Err(e) => panic!("Could not open input file: {}", e),
+            Err(e) => panic!("Could not open input file \"{}\": {}", input, e),
         };
 
         let name = match Path::new(&input).file_name() {
-            Some(name) => name.to_str().unwrap_or("").replace('.', "_"),
-            None => panic!("Could not retrieve input file name"),
+            Some(name) => match name.to_str() {
+                Some(name) => name.replace(['.', ' '], "_"),
+                None => panic!("Could not retrieve input file name for \"{}\"", input),
+            },
+            None => panic!("Could not retrieve input file name for \"{}\"", input),
         };
-
-        if name.is_empty() {
-            panic!("File name cannot be empty");
-        }
 
         if input_list.iter().any(|i: &Input| i.name == name) {
             panic!("Input file names must be unique");

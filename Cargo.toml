@@ -1,6 +1,6 @@
 [package]
 name = "embin"
-version = "1.1.0"
+version = "1.1.1"
 edition = "2021"
 license = "MIT"
 description = "Embed binary or text files into source code of a specific language"
@@ -21,6 +21,7 @@ colored = "2.0.0"
 copyright = "2023, Martin Olivier"
 maintainer = "Martin Olivier <martin.olivier@live.fr>"
 license-file = ["LICENSE"]
+extended-description = "A simple program that can embed binary or text files into source code of a specific language"
 priority = "optional"
 section = "utility"
 assets = [
