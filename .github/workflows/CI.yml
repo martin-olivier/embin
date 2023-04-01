@@ -98,19 +98,19 @@ jobs:
         run: cargo install cargo-deb
 
       - name: Build package
-        run: cargo deb -o embin_x86_64.deb
+        run: cargo deb -o embin-x86_64.deb
 
       - name: Save artifact
         uses: actions/upload-artifact@v3
         with:
-          name: embin_x86_64.deb
-          path: ./embin_x86_64.deb
+          name: embin-x86_64.deb
+          path: ./embin-x86_64.deb
           if-no-files-found: error
 
       - name: Upload package
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: ./embin_x86_64.deb
+          files: ./embin-x86_64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
