@@ -6,8 +6,8 @@
 <h4 align="center">A simple program that can embed binary or text files into source code of a specific language</h4>
 
 <p align="center">
-  <a href="https://github.com/martin-olivier/embin/releases/tag/v1.1.1">
-    <img src="https://img.shields.io/badge/Version-1.1.1-blue.svg" alt="version"/>
+  <a href="https://github.com/martin-olivier/embin/releases/tag/v1.1.2">
+    <img src="https://img.shields.io/badge/Version-1.1.2-blue.svg" alt="version"/>
   </a>
   <a href="https://github.com/martin-olivier/embin/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-darkgreen.svg" alt="license"/>

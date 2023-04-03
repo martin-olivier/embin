@@ -1,6 +1,6 @@
 [package]
 name = "embin"
-version = "1.1.1"
+version = "1.1.2"
 edition = "2021"
 license = "MIT"
 description = "Embed binary or text files into source code of a specific language"
