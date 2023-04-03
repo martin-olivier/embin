@@ -10,16 +10,16 @@ use colored::Colorize;
 pub fn parse(args: &Args) -> Params {
     std::panic::set_hook(Box::new(|err| {
         if let Some(msg) = err.payload().downcast_ref::<&str>() {
-            println!("{} {}", "Error:".bold().red(), msg.bold().red());
+            eprintln!("{} {}", "Error:".bold().red(), msg.bold().red());
         } else if let Some(msg) = err.payload().downcast_ref::<String>() {
-            println!("{} {}", "Error:".bold().red(), msg.bold().red());
+            eprintln!("{} {}", "Error:".bold().red(), msg.bold().red());
         } else {
-            println!("{} {}", "Error:".bold().red(), err);
+            eprintln!("{} {}", "Error:".bold().red(), err);
         }
         std::process::exit(1);
     }));
 
-    let output: BufWriter<Box<dyn Write>> = match args.output {
+    let output_buf: BufWriter<Box<dyn Write>> = match args.output {
         Some(ref path) => {
             let file = match File::create(path) {
                 Ok(file) => file,
@@ -76,7 +76,7 @@ pub fn parse(args: &Args) -> Params {
 
     Params {
         input: input_list,
-        output,
+        output: output_buf,
         mutable: args.mutable,
         format: args.format,
         indent: args.indent,

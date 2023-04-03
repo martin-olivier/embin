@@ -22,7 +22,6 @@ pub enum Format {
 
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]
-
 pub struct Args {
     /// Input file(s) to embed, which can be binary or text files
     #[clap(required = true)]

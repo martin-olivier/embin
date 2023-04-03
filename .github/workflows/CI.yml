@@ -2,17 +2,7 @@ name: CI
 
 on:
   push:
-    paths:
-      - src/*
-      - tests/*
-      - .github/workflows/*.yml
-      - Cargo.toml
   pull_request:
-    paths:
-      - src/*
-      - tests/*
-      - .github/workflows/*.yml
-      - Cargo.toml
   release:
     types: [published]
 
@@ -37,23 +27,9 @@ jobs:
       - name: Format
         run: cargo fmt --all -- --check
 
-  build:
-    name: ${{ matrix.runs-on }}
-    runs-on: ${{ matrix.runs-on }}
-    needs: linter
-    permissions: write-all
-    strategy:
-      fail-fast: false
-      matrix:
-        runs-on: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - runs-on: ubuntu-latest
-            os: linux
-          - runs-on: macos-latest
-            os: macos
-          - runs-on: windows-latest
-            os: windows
-            suffix: .exe
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -62,55 +38,173 @@ jobs:
         run: cargo install --path .
 
       - name: Run tests
-        if: runner.os != 'Windows'
         working-directory: tests
         run: ./run_tests.sh
 
-      - name: Save artifact
+  linux:
+    name: linux (${{ matrix.arch_name }})
+    runs-on: ubuntu-20.04
+    permissions: write-all
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu]
+        include:
+          - arch: x86_64-unknown-linux-gnu
+            arch_name: x86_64
+          - arch: aarch64-unknown-linux-gnu
+            arch_name: arm64
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install toolchain
+        run: rustup target add ${{ matrix.arch }}
+
+      - name: Install gcc
+        run: sudo apt install gcc-aarch64-linux-gnu
+
+      - name: Build binary
+        run: cargo build --release --target=${{ matrix.arch }}
+
+      - name: Save binary artifact
         uses: actions/upload-artifact@v3
         with:
-          name: embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
-          path: target/release/embin${{ matrix.suffix }}
+          name: embin-linux-${{ matrix.arch_name }}
+          path: target/${{ matrix.arch }}/release/embin
           if-no-files-found: error
 
       - name: Set binary name
         if: github.event_name == 'release'
-        run: cp target/release/embin${{ matrix.suffix }} embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
+        run: cp target/${{ matrix.arch }}/release/embin embin-linux-${{ matrix.arch_name }}
 
       - name: Upload binary
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: embin-x86_64-${{ matrix.os }}${{ matrix.suffix }}
+          files: embin-linux-${{ matrix.arch_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  package:
-    name: debian package
-    runs-on: ubuntu-latest
-    needs: build
-    permissions: write-all
-
-    steps:
-      - uses: actions/checkout@v3
 
       - name: Install cargo-deb
         run: cargo install cargo-deb
 
-      - name: Build package
-        run: cargo deb -o embin-x86_64.deb
+      - name: Build debian package
+        run: cargo deb --target=${{ matrix.arch }} -o embin-debian-${{ matrix.arch_name }}.deb
+
+      - name: Save debian artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: embin-debian-${{ matrix.arch_name }}.deb
+          path: ./embin-debian-${{ matrix.arch_name }}.deb
+          if-no-files-found: error
+      
+      - name: Install alien
+        run: sudo apt install alien
+
+      - name: Build redhat package
+        run: alien ./embin-debian-${{ matrix.arch_name }}.deb -k --to-rpm
+
+      - name: Set package name
+        run: mv *.rpm embin-redhat-${{ matrix.arch_name }}.rpm
+
+      - name: Save redhat artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: embin-redhat-${{ matrix.arch_name }}.rpm
+          path: ./embin-redhat-${{ matrix.arch_name }}.rpm
+          if-no-files-found: error
+
+      - name: Upload packages
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./embin-debian-${{ matrix.arch_name }}.deb
+            ./embin-redhat-${{ matrix.arch_name }}.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  mac_os:
+    name: macOS (${{ matrix.arch_name }})
+    runs-on: macos-latest
+    permissions: write-all
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64-apple-darwin, aarch64-apple-darwin]
+        include:
+          - arch: x86_64-apple-darwin
+            arch_name: intel
+          - arch: aarch64-apple-darwin
+            arch_name: silicon
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install toolchain
+        run: rustup target add ${{ matrix.arch }}
+
+      - name: Build binary
+        run: cargo build --release --target=${{ matrix.arch }}
 
       - name: Save artifact
         uses: actions/upload-artifact@v3
         with:
-          name: embin-x86_64.deb
-          path: ./embin-x86_64.deb
+          name: embin-macos-${{ matrix.arch_name }}
+          path: target/${{ matrix.arch }}/release/embin
           if-no-files-found: error
 
-      - name: Upload package
+      - name: Set binary name
+        if: github.event_name == 'release'
+        run: cp target/${{ matrix.arch }}/release/embin embin-macos-${{ matrix.arch_name }}
+
+      - name: Upload binary
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: ./embin-x86_64.deb
+          files: embin-macos-${{ matrix.arch_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  windows:
+    name: windows (${{ matrix.arch_name }})
+    runs-on: windows-latest
+    permissions: write-all
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc]
+        include:
+          - arch: x86_64-pc-windows-msvc
+            arch_name: x86_64
+          - arch: aarch64-pc-windows-msvc
+            arch_name: arm64
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install toolchain
+        run: rustup target add ${{ matrix.arch }}
+
+      - name: Build binary
+        run: cargo build --release --target=${{ matrix.arch }}
+
+      - name: Save artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: embin-windows-${{ matrix.arch_name }}.exe
+          path: target/${{ matrix.arch }}/release/embin.exe
+          if-no-files-found: error
+
+      - name: Set binary name
+        if: github.event_name == 'release'
+        run: cp target/${{ matrix.arch }}/release/embin.exe embin-windows-${{ matrix.arch_name }}.exe
+
+      - name: Upload binary
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: embin-windows-${{ matrix.arch_name }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -3,7 +3,7 @@ use super::*;
 pub fn parse(mut params: Params) -> Result<(), Error> {
     for idx in 0..params.input.len() {
         let name = match params.mutable {
-            true => params.input[idx].name.clone(),
+            true => params.input[idx].name.to_lowercase(),
             false => params.input[idx].name.to_uppercase(),
         };
 
