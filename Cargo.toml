@@ -10,7 +10,7 @@ repository = "https://github.com/martin-olivier/embin"
 documentation = "https://github.com/martin-olivier/embin"
 keywords = ["embed", "assets", "xxd", "deploy", "lang"]
 categories = ["development-tools", "command-line-utilities"]
-exclude = ["/.github", "/tests"]
+exclude = ["/.github", "/.cargo", "/tests"]
 readme = "README.md"
 
 [dependencies]
