@@ -62,6 +62,9 @@ jobs:
       - name: Install toolchain
         run: rustup target add ${{ matrix.arch }}
 
+      - name: Update apt
+        run: sudo apt update
+
       - name: Install gcc
         run: sudo apt install gcc-aarch64-linux-gnu
 
