@@ -15,7 +15,7 @@ readme = "README.md"
 
 [dependencies]
 clap = { version = "4.2.5", features = ["derive"] }
-colored = "2.0.0"
+colored = "2.0.4"
 
 [package.metadata.deb]
 copyright = "2023, Martin Olivier"
