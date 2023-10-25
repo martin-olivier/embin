@@ -14,8 +14,8 @@ exclude = ["/.github", "/.cargo", "/tests"]
 readme = "README.md"
 
 [dependencies]
-clap = { version = "4.4.2", features = ["derive"] }
-colored = "2.0.4"
+clap = { version = "4.4", features = ["derive"] }
+colored = "2"
 
 [package.metadata.deb]
 copyright = "2023, Martin Olivier"
