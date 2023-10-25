@@ -1,4 +1,4 @@
--s dir ./target/release/embin README.md LICENSE
+-s dir target/release/embin README.md LICENSE
 --name embin
 --license MIT
 --version 1.1.2
