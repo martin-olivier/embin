@@ -80,6 +80,9 @@ jobs:
       - name: Build binary
         run: cargo build --release --target=${{ matrix.arch }}
 
+      - name: Get binary
+        run: cp target/${{ matrix.arch }}/release/embin .
+
       - name: Build debian package
         run: fpm -t deb -p embin_${{ matrix.arch }}.deb --architecture ${{ matrix.arch }}
   

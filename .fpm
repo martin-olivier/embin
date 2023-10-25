@@ -1,4 +1,4 @@
--s dir target/release/embin README.md LICENSE
+-s dir embin README.md LICENSE
 --name embin
 --license MIT
 --version 1.1.2
@@ -9,6 +9,6 @@
 --provides embin
 --conflicts embin
 
-target/release/embin=/usr/bin/embin
+embin=/usr/bin/embin
 README.md=/usr/share/doc/embin/README.md
 LICENSE=/usr/share/doc/embin/LICENSE
