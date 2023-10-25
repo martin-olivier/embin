@@ -1,0 +1,14 @@
+-s dir ./target/release/embin README.md LICENSE
+--name embin
+--license MIT
+--version 1.1.2
+--description "A simple program that can embed binary or text files into source code of a specific language"
+--url "https://github.com/martin-olivier/embin"
+--maintainer "Martin Olivier <martin.olivier@live.fr>"
+
+--provides embin
+--conflicts embin
+
+target/release/embin=/usr/bin/embin
+README.md=/usr/share/doc/embin/README.md
+LICENSE=/usr/share/doc/embin/LICENSE

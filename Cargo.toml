@@ -16,15 +16,3 @@ readme = "README.md"
 [dependencies]
 clap = { version = "4.4", features = ["derive"] }
 colored = "2"
-
-[package.metadata.deb]
-copyright = "2023, Martin Olivier"
-maintainer = "Martin Olivier <martin.olivier@live.fr>"
-license-file = ["LICENSE"]
-extended-description = "A simple program that can embed binary or text files into source code of a specific language"
-priority = "optional"
-section = "utility"
-assets = [
-    ["target/release/embin", "/usr/bin/embin", "755"],
-    ["README.md", "/usr/share/doc/embin/README", "644"],
-]
