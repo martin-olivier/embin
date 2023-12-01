@@ -5,25 +5,35 @@ use std::path::Path;
 use crate::args::{Args, Indent};
 use crate::lang::{Input, Params};
 
-use colored::Colorize;
+#[derive(thiserror::Error, Debug)]
+pub enum ParserError {
+    #[error("Could not open input file \"{0}\": {1}")]
+    InputError(String, std::io::Error),
+    #[error("Could not create output file \"{0}\": {1}")]
+    OutputError(String, std::io::Error),
+    #[error("Could not retrieve metadata of input file \"{0}\": {1}")]
+    MetadataError(String, std::io::Error),
+    #[error("Could not retrieve input file name for \"{0}\"")]
+    FileNameError(String),
+    #[error("Unique input file names are required, found duplicate \"{0}\"")]
+    DuplicateFileNameError(String),
+    #[error("Quantity parameter must be greater than 0")]
+    QuantityError,
+    #[error("Padding must be a multiple of 4 when using tabs as indentation type")]
+    PaddingError,
+}
 
-pub fn parse(args: &Args) -> Params {
-    std::panic::set_hook(Box::new(|err| {
-        if let Some(msg) = err.payload().downcast_ref::<&str>() {
-            eprintln!("{} {}", "Error:".bold().red(), msg.bold().red());
-        } else if let Some(msg) = err.payload().downcast_ref::<String>() {
-            eprintln!("{} {}", "Error:".bold().red(), msg.bold().red());
-        } else {
-            eprintln!("{} {}", "Error:".bold().red(), err);
-        }
-        std::process::exit(1);
-    }));
-
+pub fn parse(args: &Args) -> Result<Params, ParserError> {
     let output_buf: BufWriter<Box<dyn Write>> = match args.output {
         Some(ref path) => {
             let file = match File::create(path) {
                 Ok(file) => file,
-                Err(e) => panic!("Could not create output file: {}", e),
+                Err(err) => {
+                    return Err(ParserError::OutputError(
+                        path.to_owned(),
+                        err
+                    ));
+                }
             };
             BufWriter::new(Box::new(file))
         }
@@ -31,50 +41,61 @@ pub fn parse(args: &Args) -> Params {
     };
 
     if args.quantity == 0 {
-        panic!("Quantity parameter must be greater than 0");
+        return Err(ParserError::QuantityError);
     }
 
     if args.indent == Indent::Tab && args.padding % 4 != 0 {
-        panic!("Padding must be a multiple of 4 when using tabs as indentation type");
+        return Err(ParserError::PaddingError);
     }
 
     let mut input_list = vec![];
 
     for input in args.input.iter() {
         if Path::new(input).is_dir() {
-            panic!("Could not open input file \"{}\": Is a directory", input);
+            return Err(ParserError::InputError(
+                input.to_owned(),
+                std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    "Input file is a directory"
+                ),
+            ));
         }
 
         let (len, file) = match File::open(input) {
             Ok(file) => (
                 match file.metadata() {
                     Ok(metadata) => metadata.len() as usize,
-                    Err(e) => panic!(
-                        "Could not retrieve input file \"{}\" metadata: {}",
-                        input, e
-                    ),
+                    Err(err) => {
+                        return Err(ParserError::MetadataError(
+                            input.to_owned(), err
+                        ));
+                    },
                 },
                 BufReader::new(file),
             ),
-            Err(e) => panic!("Could not open input file \"{}\": {}", input, e),
+            Err(err) => {
+                return Err(ParserError::InputError(
+                    input.to_owned(), err
+                ));
+            },
         };
 
         let name = match Path::new(&input).file_name() {
             Some(name) => match name.to_str() {
                 Some(name) => name.replace(['.', ' '], "_"),
-                None => panic!("Could not retrieve input file name for \"{}\"", input),
+                None => return Err(ParserError::FileNameError(input.to_owned())),
             },
-            None => panic!("Could not retrieve input file name for \"{}\"", input),
+            None => return Err(ParserError::FileNameError(input.to_owned())),
         };
 
         if input_list.iter().any(|i: &Input| i.name == name) {
-            panic!("Input file names must be unique");
+            return Err(ParserError::DuplicateFileNameError(name));
         }
 
         input_list.push(Input { file, name, len });
     }
 
-    Params {
+    Ok(Params {
         input: input_list,
         output: output_buf,
         mutable: args.mutable,
@@ -82,5 +103,5 @@ pub fn parse(args: &Args) -> Params {
         indent: args.indent,
         padding: args.padding,
         quantity: args.quantity,
-    }
+    })
 }
