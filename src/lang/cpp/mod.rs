@@ -1,7 +1,7 @@
 use super::*;
 
 pub fn parse(mut params: Params) -> Result<(), Error> {
-    let accessibility = match params.mutable {
+    let mutability = match params.mutable {
         true => "",
         false => "constexpr ",
     };
@@ -27,7 +27,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
         writeln!(
             params.output,
             "{}std::{}{} {}{}",
-            accessibility, storage, template, params.input[idx].name, brackets
+            mutability, storage, template, params.input[idx].name, brackets
         )?;
 
         write_data(&mut params, idx)?;

@@ -2,7 +2,7 @@ use super::*;
 
 pub fn parse(mut params: Params) -> Result<(), Error> {
     for idx in 0..params.input.len() {
-        let accessibility = match params.mutable {
+        let mutability = match params.mutable {
             true => "",
             false => "const ",
         };
@@ -15,7 +15,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
         writeln!(
             params.output,
             "{}unsigned char {}[] ={}",
-            accessibility, params.input[idx].name, brackets,
+            mutability, params.input[idx].name, brackets,
         )?;
 
         write_data(&mut params, idx)?;
@@ -28,7 +28,7 @@ pub fn parse(mut params: Params) -> Result<(), Error> {
         writeln!(
             params.output,
             "{}unsigned int {}_len = {};",
-            accessibility, params.input[idx].name, params.input[idx].len
+            mutability, params.input[idx].name, params.input[idx].len
         )?;
 
         if idx != params.input.len() - 1 {
