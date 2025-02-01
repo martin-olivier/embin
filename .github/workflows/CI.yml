@@ -115,7 +115,7 @@ jobs:
   
       - name: Upload packages
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             ./embin-debian-${{ matrix.arch_name }}.deb
@@ -161,7 +161,7 @@ jobs:
 
       - name: Upload binary
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: embin-macos-${{ matrix.arch_name }}
         env:
@@ -204,7 +204,7 @@ jobs:
 
       - name: Upload binary
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: embin-windows-${{ matrix.arch_name }}.exe
         env:
