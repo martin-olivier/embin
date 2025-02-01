@@ -11,7 +11,7 @@ jobs:
     name: commits
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: webiny/action-conventional-commits@v1.1.0
 
   linter:
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Clippy
         run: cargo clippy --all --all-features -- -D warnings
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build and install binary
         run: cargo install --path .
@@ -59,7 +59,7 @@ jobs:
             compiler: gcc-aarch64-linux-gnu
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install toolchain
         run: rustup target add ${{ matrix.arch }}
@@ -140,7 +140,7 @@ jobs:
             arch_name: silicon
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install toolchain
         run: rustup target add ${{ matrix.arch }}
@@ -183,7 +183,7 @@ jobs:
             arch_name: aarch64
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install toolchain
         run: rustup target add ${{ matrix.arch }}
