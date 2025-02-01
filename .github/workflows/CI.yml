@@ -87,7 +87,7 @@ jobs:
         run: fpm -t deb -p embin-debian-${{ matrix.arch_name }}.deb --architecture ${{ matrix.arch }}
 
       - name: Save debian artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: embin-debian-${{ matrix.arch_name }}.deb
           path: ./embin-debian-${{ matrix.arch_name }}.deb
@@ -97,7 +97,7 @@ jobs:
         run: fpm -t rpm -p embin-redhat-${{ matrix.arch_name }}.rpm --architecture ${{ matrix.arch }}
   
       - name: Save redhat artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: embin-redhat-${{ matrix.arch_name }}.rpm
           path: ./embin-redhat-${{ matrix.arch_name }}.rpm
@@ -107,7 +107,7 @@ jobs:
         run: fpm -t pacman -p embin-archlinux-${{ matrix.arch_name }}.pkg.tar.zst --architecture ${{ matrix.arch }}
   
       - name: Save archlinux artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: embin-archlinux-${{ matrix.arch_name }}.pkg.tar.zst
           path: ./embin-archlinux-${{ matrix.arch_name }}.pkg.tar.zst
@@ -149,7 +149,7 @@ jobs:
         run: cargo build --release --target=${{ matrix.arch }}
 
       - name: Save artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: embin-macos-${{ matrix.arch_name }}
           path: target/${{ matrix.arch }}/release/embin
@@ -192,7 +192,7 @@ jobs:
         run: cargo build --release --target=${{ matrix.arch }}
 
       - name: Save artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: embin-windows-${{ matrix.arch_name }}.exe
           path: target/${{ matrix.arch }}/release/embin.exe
